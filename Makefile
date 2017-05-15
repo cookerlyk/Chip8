@@ -1,15 +1,17 @@
-# CC specifies which compiler will be used.
+# Which compiler will be used.
 CC=gcc
 
 # CFLAGS specifies compiler options
 
-CFLAGS=-c -std=c99 -Wall -Wextra
+CFLAGS=-c -std=c99 -Wall -Wextra -Iinc
 
 # All of the .h header files to use as dependencies
 HEADERS=
 
 # All of the object files to produce as intermediary work
-OBJECTS=main.o
+OBJECTS= src/main.o
+
+SOURCEDIR = src/
 
 # The final program to build
 EXECUTABLE=chip8
@@ -25,4 +27,4 @@ $(EXECUTABLE): $(OBJECTS)
 	$(CC) $(CFLAGS) -o $@ $<
 
 clean:
-	rm -rf *.o $(EXECUTABLE)
+	rm -rf src/*.o $(EXECUTABLE)

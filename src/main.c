@@ -1,6 +1,3 @@
-// FIXME can't make because Makefile cannot see into the /src directory
-
-
 #include <stdio.h>
 
 

@@ -1,6 +1,7 @@
 # OS files #
 .DS_Store
 
-
 # Editor Files #
 .vscode
+
+roms/*
