@@ -1,6 +1,8 @@
 #ifndef INSTRUCTIONS_H
 #define INSTRUCTIONS_H
 
+#include <stdint.h>
+
 #define TRUE 1
 #define FALSE 0
 
