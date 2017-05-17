@@ -22,7 +22,7 @@ int main (int args, char *argv[]) {
     load_rom(&user_chip8, argv[1]);
 
     // TODO: system loop
-        // execute instruction
+        execute_instruction(&user_chip8);
         // draw graphics
         // key input state stored
 
