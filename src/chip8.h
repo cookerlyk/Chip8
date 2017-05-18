@@ -9,7 +9,7 @@
 #define TIMER_MAX 255
 
 
-void load_rom(Chip8 *chip8, const char *rom_filename);
+int load_rom(Chip8 *chip8, const char *rom_filename);
 void init_system(Chip8 *chip8);
 uint16_t fetch_opcode(Chip8 *chip8);
 void execute_instruction(Chip8 *chip8);

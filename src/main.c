@@ -11,7 +11,7 @@
 #include "chip8.h"
 
 
-int main (int args, char *argv[]) {
+int main (int argc, char *argv[]) {
 
     Chip8 user_chip8; // TODO: needs a better name
 
@@ -19,6 +19,8 @@ int main (int args, char *argv[]) {
     // TODO: setup input
 
     init_system(&user_chip8);
+
+    // TODO: handle if the rom load fails
     load_rom(&user_chip8, argv[1]);
 
     // TODO: system loop

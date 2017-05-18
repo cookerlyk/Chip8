@@ -6,7 +6,7 @@ CC=gcc
 CFLAGS=-c -std=c99 -Wall -Wextra -Iinc
 
 # All of the .h header files to use as dependencies
-HEADERS= src/instructions.h src/chip8.h
+HEADERS= src/instructions.h src/chip8.h src/chip8_t.h
 
 # All of the object files to produce as intermediary work
 OBJECTS= src/main.o src/chip8.o src/instructions.o

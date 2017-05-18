@@ -1,6 +1,7 @@
 #ifndef INSTRUCTIONS_H
 #define INSTRUCTIONS_H
 
+#include <stdlib.h>
 #include <stdint.h>
 #include "chip8_t.h"
 

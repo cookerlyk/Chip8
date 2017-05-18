@@ -2,36 +2,42 @@
 
 
 // Load the rom into memory
-void load_rom(Chip8 *chip8, const char *rom_filename) {
+int load_rom(Chip8 *chip8, const char *rom_filename) {
+    int rom_length;
+    uint8_t *rom_buffer;
+
     FILE *rom = fopen(rom_filename, "rb");
     if (rom != NULL) {
         printf("%s\n", rom_filename);
 
-        // get the size of the rom to allocate memory for a buffer
+        // Get the size of the rom to allocate memory for a buffer
         fseek(rom, 0, SEEK_END);
-        long rom_length = ftell(rom); // TODO: does this need to be a long?
+        rom_length = ftell(rom); 
         rewind(rom);
 
-        uint8_t *rom_buffer = (uint8_t*) malloc(sizeof(uint8_t) * rom_length);
+        rom_buffer = (uint8_t*) malloc(sizeof(uint8_t) * rom_length);
         if (rom_buffer == NULL) {
             printf("ERROR: out of memory");
+            return FALSE;
         }
-        fread(rom_buffer, sizeof(uint8_t), (size_t)rom_length, rom); // TODO: handle error if not read into memory?
 
-        //long buffer_size = rom_buffer.length();
+        // TODO: handle error if not read into memory?
+        fread(rom_buffer, sizeof(uint8_t), rom_length, rom); 
 
-        // TODO: rom size verfication? 0xfff - 0x200 >= rom_length
+        // TODO: rom size verfication? 0xfff - 0x200 >= rom_length?
         for(int i = 0; i < rom_length; i++)
             chip8->ram[i + 0x200] = rom_buffer[i];
         }
 
     else {
-        // TODO: handle the error correctly
+        // TODO: handle the error better?
         printf("ERROR: File does not exist\n");
+        return FALSE;
     }
 
     fclose(rom);
-    //free(rom_buffer); // FIXME: gives an undeclared error
+    free(rom_buffer);
+    return TRUE;
 }
 
 
