@@ -23,11 +23,13 @@ int main (int argc, char *argv[]) {
     // TODO: handle if the rom load fails
     load_rom(&user_chip8, argv[1]);
 
-    // TODO: system loop
+    // System loop
+    while(TRUE){
         execute_instruction(&user_chip8);
         // draw graphics
         // key input state stored
-
+    }
+        
     return 0;
 }
 
