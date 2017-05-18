@@ -1,12 +1,16 @@
 /*
 *
-* Definition of the chip8 struct. 
+* Definition of the chip8 struct and some constants 
+* to be used by the program. 
 *
 */
 
 #define NUM_V_REGISTERS 16
 #define TOTAL_RAM 4096
 #define STACK_SIZE 16
+#define PC_START 0x200
+#define TIMER_MAX 255
+
 #define TRUE 1
 #define FALSE 0
 

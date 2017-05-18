@@ -1,15 +1,13 @@
 #include "chip8.h"
 
 
-// Load the rom into memory
+// Load the rom into memory starting at location 0x200
 int load_rom(Chip8 *chip8, const char *rom_filename) {
     int rom_length;
     uint8_t *rom_buffer;
 
     FILE *rom = fopen(rom_filename, "rb");
     if (rom != NULL) {
-        printf("%s\n", rom_filename);
-
         // Get the size of the rom to allocate memory for a buffer
         fseek(rom, 0, SEEK_END);
         rom_length = ftell(rom); 
@@ -79,13 +77,18 @@ void init_system(Chip8 *chip8) {
 
 
 uint16_t fetch_opcode(Chip8 *chip8) {
-    // TODO: actually grab the next opcode from the memory
-    return 0x1fff;
+    uint16_t opcode;
+    uint8_t msB = chip8->ram[chip8->pc_reg];
+    uint8_t lsB = chip8->ram[chip8->pc_reg + 1];
+
+    opcode = msB << 8 | lsB;
+
+    return opcode;
 }
 
 
 void execute_instruction(Chip8 *chip8) {
-    uint16_t opcode = fetch_opcode(&chip8);
+    uint16_t opcode = fetch_opcode(chip8);
     chip8->current_op = opcode;
 
     switch(opcode) {
@@ -93,7 +96,9 @@ void execute_instruction(Chip8 *chip8) {
         // TODO: Cases calling the corresponding opcode functions
 
         default:
-            printf("Unrecognized opcode: %x\n", opcode);
+            printf("ERROR: Unrecognized opcode 0x%X\n", opcode);
+            exit(EXIT_FAILURE);
     }
+    chip8->pc_reg +=2;
 }
 
