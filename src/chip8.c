@@ -91,14 +91,23 @@ void execute_instruction(Chip8 *chip8) {
     uint16_t opcode = fetch_opcode(chip8);
     chip8->current_op = opcode;
 
-    switch(opcode) {
-
-        // TODO: Cases calling the corresponding opcode functions
+    switch(opcode & 0xF000) {
+        case 0xA000:
+            ANNN(chip8);
+            break;
 
         default:
             printf("ERROR: Unrecognized opcode 0x%X\n", opcode);
             exit(EXIT_FAILURE);
     }
-    chip8->pc_reg +=2;
 }
 
+
+void print_regs(Chip8 *chip8) {
+    for (int i = 0; i < NUM_V_REGISTERS; i++) {
+        printf("V Reg %X: 0x%X\n",i , chip8->V[i]);
+    }
+    printf("Index Reg: 0x%X\n", chip8->I_reg);
+    printf("PC Reg: 0x%X\n", chip8->pc_reg);
+    printf("SP Reg: 0x%X\n", chip8->sp_reg);
+}

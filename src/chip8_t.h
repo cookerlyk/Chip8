@@ -11,6 +11,11 @@
 #define PC_START 0x200
 #define TIMER_MAX 255
 
+#define CHIP8_RAM_START_ADDR 0x000
+#define CHIP8_RAM_END_ADDR 0x1FF
+#define PROGRAM_START_ADDR 0x200
+#define PROGRAM_END_ADDR 0xFFF
+
 #define TRUE 1
 #define FALSE 0
 

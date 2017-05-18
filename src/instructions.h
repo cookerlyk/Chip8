@@ -8,7 +8,7 @@
 #include "chip8_t.h"
 
 
-// TODO: the function declarations for the 35 instructions
+void ANNN(Chip8 *chip8);
 
 
 #endif // INSTRUCTIONS_H

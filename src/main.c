@@ -26,6 +26,8 @@ int main (int argc, char *argv[]) {
     // System loop
     while(TRUE){
         execute_instruction(&user_chip8);
+        
+        print_regs(&user_chip8);
         // draw graphics
         // key input state stored
     }
