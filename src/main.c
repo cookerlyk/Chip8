@@ -13,6 +13,9 @@
 
 int main (int argc, char *argv[]) {
 
+    // seed the RNG
+    srand(time(NULL));
+
     Chip8 user_chip8; // TODO: needs a better name
 
     // TODO: setup graphics
@@ -26,8 +29,11 @@ int main (int argc, char *argv[]) {
     // System loop
     while(TRUE){
         execute_instruction(&user_chip8);
-        
+
+        // Test register printout 
         print_regs(&user_chip8);
+
+
         // draw graphics
         // key input state stored
     }
