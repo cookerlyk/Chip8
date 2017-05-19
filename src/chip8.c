@@ -92,8 +92,61 @@ void execute_instruction(Chip8 *chip8) {
     chip8->current_op = opcode;
 
     switch(opcode & 0xF000) {
+        case 0x0000:
+            switch(opcode & 0x00FF) {
+                case 0x00EE:
+                    printf("Instruction Return from Subroutine (00EE)\n");
+                    return_from_subroutine(chip8);
+                    break;
+                default:
+                    printf("ERROR: Unrecognized opcode 0x%X\n", opcode);
+                    exit(EXIT_FAILURE);
+                }
+                break;
+
+        case 0x1000:
+            printf("Instruction Jump (1NNN)\n");
+            jump(chip8);
+            break;
+        
+        case 0x2000:
+            printf("Instruction Call Subroutine (2NNN)\n");
+            call_subroutine(chip8);
+            break;
+
+        case 0x3000:
+            printf("Skip next instr Vx == kk (3XKK)\n");
+            se_Vx_kk(chip8);
+            break;
+
+        case 0x4000:
+            printf("Skip next instr Vx != kk (4XKK)\n");
+            sne_Vx_kk(chip8);
+            break;
+
+        case 0x6000:
+            printf("Instruction Load Vx reg (6XKK)\n");
+            ld_Vx(chip8);
+            break;
+
+        case 0x7000:
+            printf("Instruction ADD Vx reg immediate (7XKK)\n");
+            add_Vx_imm(chip8);
+            break;
+
         case 0xA000:
-            ANNN(chip8);
+            printf("Instruction LDI (ANNN)\n");
+            ldi(chip8);
+            break;
+
+        case 0xC000:
+            printf("Instruction RNG Vx (CXKK)\n");
+            rnd(chip8);
+            break;
+
+        case 0xD000:
+            printf("Draw Sprite (DXYN)\n");
+            drw(chip8);
             break;
 
         default:
@@ -104,10 +157,18 @@ void execute_instruction(Chip8 *chip8) {
 
 
 void print_regs(Chip8 *chip8) {
+    // print registers
+    printf("Current OP: 0x%X\n", chip8->current_op);
     for (int i = 0; i < NUM_V_REGISTERS; i++) {
         printf("V Reg %X: 0x%X\n",i , chip8->V[i]);
     }
     printf("Index Reg: 0x%X\n", chip8->I_reg);
     printf("PC Reg: 0x%X\n", chip8->pc_reg);
     printf("SP Reg: 0x%X\n", chip8->sp_reg);
+    printf("\n");
+
+    // print stack
+    // for (int i = 0; i < STACK_SIZE; i++) {
+    //     printf("Stack Element %i: 0x%X\n",i , chip8->stack[i]);
+    // }
 }
