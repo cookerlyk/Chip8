@@ -1,3 +1,6 @@
+#ifndef CHIP8_T_H
+#define CHIP8_T_H
+
 /*
 *
 * Definition of the chip8 struct and some constants 
@@ -8,6 +11,7 @@
 #define NUM_V_REGISTERS 16
 #define TOTAL_RAM 4096
 #define STACK_SIZE 16
+#define FONTSET_SIZE 80
 #define PC_START 0x200
 #define TIMER_MAX 255
 
@@ -32,9 +36,11 @@ struct Chip8_t {
     uint16_t pc_reg;                 // pc register
     uint16_t sp_reg;                 // stack pointer register
 
+    // timers
     uint8_t delay_timer;
     uint8_t sound_timer;
 
     uint16_t current_op;             // current opcode being executed by the system
-
 };
+
+#endif // CHIP8_T_H

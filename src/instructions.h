@@ -17,10 +17,15 @@ void se_Vx_kk(Chip8 *chip8);
 void sne_Vx_kk(Chip8 *chip8);
 void ld_Vx(Chip8 *chip8);
 void add_Vx_imm(Chip8 *chip8);
+void move_Vx_Vy(Chip8 *chip8);
 void ldi(Chip8 *chip8);
 void rnd(Chip8 *chip8);
-
-
 void drw(Chip8 *chip8);
+void skp(Chip8 *chip8);
+void sknp(Chip8 *chip8);
+void ld_Vx_dt(Chip8 *chip8);
+void ld_dt_Vx(Chip8 *chip8);
+void add_i_Vx(Chip8 *chip8);
+
 
 #endif // INSTRUCTIONS_H

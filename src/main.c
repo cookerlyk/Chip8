@@ -33,7 +33,6 @@ int main (int argc, char *argv[]) {
         // Test register printout 
         print_regs(&user_chip8);
 
-
         // draw graphics
         // key input state stored
     }

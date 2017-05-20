@@ -46,6 +46,27 @@ int load_rom(Chip8 *chip8, const char *rom_filename) {
 * in memory
 */
 void init_system(Chip8 *chip8) {
+
+    // FIXME: Do not like this
+    const uint8_t fontset[FONTSET_SIZE] = { 
+        0xF0, 0x90, 0x90, 0x90, 0xF0, // 0
+        0x20, 0x60, 0x20, 0x20, 0x70, // 1
+        0xF0, 0x10, 0xF0, 0x80, 0xF0, // 2
+        0xF0, 0x10, 0xF0, 0x10, 0xF0, // 3
+        0x90, 0x90, 0xF0, 0x10, 0x10, // 4
+        0xF0, 0x80, 0xF0, 0x10, 0xF0, // 5
+        0xF0, 0x80, 0xF0, 0x90, 0xF0, // 6
+        0xF0, 0x10, 0x20, 0x40, 0x40, // 7
+        0xF0, 0x90, 0xF0, 0x90, 0xF0, // 8
+        0xF0, 0x90, 0xF0, 0x10, 0xF0, // 9
+        0xF0, 0x90, 0xF0, 0x90, 0x90, // A
+        0xE0, 0x90, 0xE0, 0x90, 0xE0, // B
+        0xF0, 0x80, 0x80, 0x80, 0xF0, // C
+        0xE0, 0x90, 0x90, 0x90, 0xE0, // D
+        0xF0, 0x80, 0xF0, 0x80, 0xF0, // E
+        0xF0, 0x80, 0xF0, 0x80, 0x80  // F
+    };
+
     chip8->pc_reg = PC_START;
     chip8->current_op = 0;
     chip8->sp_reg = 0;
@@ -68,7 +89,10 @@ void init_system(Chip8 *chip8) {
         chip8->V[i] = 0;
     }
 
-    // TODO: load fontset
+    // Load fontset into memory
+    for(int i = 0; i < FONTSET_SIZE; i++) {
+        chip8->ram[i] = fontset[i];
+    }
 
     // Reset timers to their max values
     chip8->delay_timer = TIMER_MAX;
@@ -98,6 +122,7 @@ void execute_instruction(Chip8 *chip8) {
                     printf("Instruction Return from Subroutine (00EE)\n");
                     return_from_subroutine(chip8);
                     break;
+
                 default:
                     printf("ERROR: Unrecognized opcode 0x%X\n", opcode);
                     exit(EXIT_FAILURE);
@@ -134,6 +159,11 @@ void execute_instruction(Chip8 *chip8) {
             add_Vx_imm(chip8);
             break;
 
+        case 0x8000:
+            printf("Instruction Move Vy reg into Vx reg (8XY0)\n");
+            move_Vx_Vy(chip8);
+            break;
+
         case 0xA000:
             printf("Instruction LDI (ANNN)\n");
             ldi(chip8);
@@ -149,12 +179,57 @@ void execute_instruction(Chip8 *chip8) {
             drw(chip8);
             break;
 
+        case 0xE000:
+            switch(opcode & 0x00FF) {
+                case 0x009E:
+                    printf("Instruction Skip next instr if key pressed (009E)\n");
+                    skp(chip8);
+                    break;
+
+                case 0x00A1:
+                    printf("Instruction Skip next instr if key not pressed (00A1)\n");
+                    sknp(chip8);
+                    break;
+
+                default:
+                    printf("ERROR: Unrecognized opcode 0x%X\n", opcode);
+                    exit(EXIT_FAILURE);
+                }
+                break;
+
+        case 0xF000:
+            switch(opcode & 0x00FF) {
+                case 0x0007:
+                    printf("Instruction Load VX with Delay Timer (0007)\n");
+                    ld_Vx_dt(chip8);
+                    break;
+
+                case 0x0015:
+                    printf("Instruction Load Delay Timer with VX (0015)\n");
+                    ld_dt_Vx(chip8);
+                    break;
+
+                case 0x001E:
+                    printf("Instruction ADD Index and Vx (001E)\n");
+                    add_i_Vx(chip8);
+                    break;
+
+                default:
+                    printf("ERROR: Unrecognized opcode 0x%X\n", opcode);
+                    exit(EXIT_FAILURE);
+                }
+                break;
+
         default:
             printf("ERROR: Unrecognized opcode 0x%X\n", opcode);
             exit(EXIT_FAILURE);
     }
 }
 
+
+/*****************************
+* Start of debugging functions
+******************************/
 
 void print_regs(Chip8 *chip8) {
     // print registers
@@ -165,10 +240,20 @@ void print_regs(Chip8 *chip8) {
     printf("Index Reg: 0x%X\n", chip8->I_reg);
     printf("PC Reg: 0x%X\n", chip8->pc_reg);
     printf("SP Reg: 0x%X\n", chip8->sp_reg);
+    printf("Delay Timer Reg: 0x%X\n", chip8->delay_timer);
+    printf("Sound Timer Reg: 0x%X\n", chip8->sound_timer);
     printf("\n");
 
     // print stack
     // for (int i = 0; i < STACK_SIZE; i++) {
     //     printf("Stack Element %i: 0x%X\n",i , chip8->stack[i]);
     // }
+}
+
+void test_instruction(Chip8 *chip8) {
+    chip8->current_op = 0x76FF;
+    chip8->V[6] = 0x19;
+    print_regs(chip8);
+    add_Vx_imm(chip8);
+    print_regs(chip8);
 }

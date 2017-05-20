@@ -91,7 +91,22 @@ void add_Vx_imm(Chip8 *chip8) {
     uint8_t kk = chip8->current_op & 0x00FF;
     uint8_t vX_value = chip8->V[target_v_reg];
     
+    // TODO: What if there is overflow?
     chip8->V[target_v_reg] = vX_value + kk;;
+    chip8->pc_reg += 2;
+}
+
+
+/*
+* Opcode 8XY0: Load Vx, Vy
+* Sets register V[X] to register V[Y]
+*/
+void move_Vx_Vy(Chip8 *chip8) {
+    uint8_t target_v_reg_x = (chip8->current_op & 0x0F00) >> 8;
+    uint8_t target_v_reg_y = (chip8->current_op & 0x00F0) >> 4;
+    uint8_t vY_value = chip8->V[target_v_reg_y];
+    
+    chip8->V[target_v_reg_x] = vY_value;
     chip8->pc_reg += 2;
 }
 
@@ -132,3 +147,60 @@ void drw(Chip8 *chip8) {
     chip8->pc_reg += 2;
 }
 
+
+/*
+* Opcode EX9E: Skip next instruction if key pressed
+* Skips the next instruciton if the key with value V[X] is pressed
+*/
+void skp(Chip8 *chip8) {
+    printf("Input not yet implemented...\n");
+    chip8->pc_reg += 2;
+}
+
+
+/*
+* Opcode EXA1: Skip next instruction if key not pressed
+* Skips the next instruciton if the key with value V[X] is not pressed
+*/
+void sknp(Chip8 *chip8) {
+    printf("Input not yet implemented...\n");
+    chip8->pc_reg += 2;
+}
+
+
+/*
+* Opcode FX07: Load Vx, DT
+* V[X] set to value in delay_timer
+*/
+void ld_Vx_dt(Chip8 *chip8) {
+    uint8_t target_v_reg = (chip8->current_op & 0x0F00) >> 8;
+
+    chip8->V[target_v_reg] = chip8->delay_timer;
+    chip8->pc_reg += 2;
+}
+
+
+/*
+* Opcode FX15: Load DT, Vx
+* delay_timer set to value V[X]
+*/
+void ld_dt_Vx(Chip8 *chip8) {
+    uint8_t target_v_reg = (chip8->current_op & 0x0F00) >> 8;
+    uint8_t vX_value = chip8->V[target_v_reg];
+
+    chip8->delay_timer = vX_value;
+    chip8->pc_reg += 2;
+}
+
+
+/*
+* Opcode FX1E: Add I, VX
+* Adds current I_reg and V[X], result stored in I_reg
+*/
+void add_i_Vx(Chip8 *chip8) {
+    uint8_t target_v_reg = (chip8->current_op & 0x0F00) >> 8;
+    uint8_t vX_value = chip8->V[target_v_reg];
+
+    chip8->I_reg = chip8->I_reg + vX_value;
+    chip8->pc_reg += 2;
+}
