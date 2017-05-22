@@ -14,8 +14,8 @@ override CFLAGS += $(SDL_CFLAGS)
 HEADERDIR= src/
 SOURCEDIR= src/
 
-HEADER_FILES= instructions.h chip8.h chip8_t.h
-SOURCE_FILES= main.c chip8.c instructions.c
+HEADER_FILES= instructions.h chip8.h screen.h chip8_t.h
+SOURCE_FILES= main.c chip8.c screen.c instructions.c
 
 # Add the file path (FP) to the Header and Source files
 HEADERS_FP = $(addprefix $(HEADERDIR),$(HEADER_FILES))
