@@ -2,18 +2,29 @@
 CC=gcc
 
 # CFLAGS specifies compiler options
+CFLAGS=-c -std=c99 -Wall -Wextra
 
-CFLAGS=-c -std=c99 -Wall -Wextra -Iinc
+# Compiler and linker options for SDL2
+SDL_CFLAGS= $(shell sdl2-config --cflags)
+SDL_LFLAGS= $(shell sdl2-config --libs)
 
-# All of the .h header files to use as dependencies
-HEADERS= src/instructions.h src/chip8.h src/chip8_t.h
+override CFLAGS += $(SDL_CFLAGS)
 
-# All of the object files to produce as intermediary work
-OBJECTS= src/main.o src/chip8.o src/instructions.o
+# Directory paths for the Header files and the Source files
+HEADERDIR= src/
+SOURCEDIR= src/
 
-SOURCEDIR = src/
+HEADER_FILES= instructions.h chip8.h chip8_t.h
+SOURCE_FILES= main.c chip8.c instructions.c
 
-# The final program to build
+# Add the file path (FP) to the Header and Source files
+HEADERS_FP = $(addprefix $(HEADERDIR),$(HEADER_FILES))
+SOURCE_FP = $(addprefix $(SOURCEDIR),$(SOURCE_FILES))
+
+# Create the object files
+OBJECTS =$(SOURCE_FP:.c = .o)
+
+# Program to build
 EXECUTABLE=chip8
 
 # --------------------------------------------
@@ -21,10 +32,10 @@ EXECUTABLE=chip8
 all: $(EXECUTABLE)
 
 $(EXECUTABLE): $(OBJECTS)
-	$(CC) $(OBJECTS) -o $(EXECUTABLE)
+	$(CC) $(OBJECTS) $(SDL_LFLAGS) -o $(EXECUTABLE)
 
-%.o: %.c $(HEADERS)
-	$(CC) $(CFLAGS) -o $@ $<
+%.o: %.c $(HEADERS_FP)
+	$(CC) $(CFLAGS) -o $@ $< 
 
 clean:
 	rm -rf src/*.o $(EXECUTABLE)
