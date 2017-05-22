@@ -20,6 +20,9 @@
 #define PROGRAM_START_ADDR 0x200
 #define PROGRAM_END_ADDR 0xFFF
 
+#define SCREEN_WIDTH 64
+#define SCREEN_HEIGHT 32
+
 #define TRUE 1
 #define FALSE 0
 
@@ -41,6 +44,9 @@ struct Chip8_t {
     uint8_t sound_timer;
 
     uint16_t current_op;             // current opcode being executed by the system
+
+    // screen
+    uint8_t screen[SCREEN_WIDTH][SCREEN_HEIGHT];
 };
 
 #endif // CHIP8_T_H
