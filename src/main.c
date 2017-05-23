@@ -63,7 +63,7 @@ int main (int argc, char *argv[]) {
     // System loop
     uint8_t color_shift = 0;
     while(user_chip8.is_running){
-        execute_instruction(&user_chip8);
+        execute_instruction(&user_chip8, logging);
 
         // Register printout if logging command line arg entered
         if (logging) {

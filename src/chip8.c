@@ -105,7 +105,7 @@ uint16_t fetch_opcode(Chip8 *chip8) {
 }
 
 
-void execute_instruction(Chip8 *chip8) {
+void execute_instruction(Chip8 *chip8, int logging) {
     uint16_t opcode = fetch_opcode(chip8);
     chip8->current_op = opcode;
 
@@ -113,12 +113,12 @@ void execute_instruction(Chip8 *chip8) {
         case 0x0000:
             switch(opcode & 0x00FF) {
                 case 0x00E0:
-                    printf("Instruction Clear screen (00E0)\n");
+                    if (logging) {printf("Instruction Clear screen (00E0)\n");}
                     cls(chip8);
                     break;
 
                 case 0x00EE:
-                    printf("Instruction Return from Subroutine (00EE)\n");
+                    if (logging) {printf("Instruction Return from Subroutine (00EE)\n");}
                     return_from_subroutine(chip8);
                     break;
 
@@ -129,64 +129,64 @@ void execute_instruction(Chip8 *chip8) {
                 break;
 
         case 0x1000:
-            printf("Instruction Jump (1NNN)\n");
+            if (logging) {printf("Instruction Jump (1NNN)\n");}
             jump(chip8);
             break;
         
         case 0x2000:
-            printf("Instruction Call Subroutine (2NNN)\n");
+            if (logging) {printf("Instruction Call Subroutine (2NNN)\n");}
             call_subroutine(chip8);
             break;
 
         case 0x3000:
-            printf("Skip next instr Vx == kk (3XKK)\n");
+            if (logging) {printf("Skip next instr Vx == kk (3XKK)\n");}
             se_Vx_kk(chip8);
             break;
 
         case 0x4000:
-            printf("Skip next instr Vx != kk (4XKK)\n");
+            if (logging) {printf("Skip next instr Vx != kk (4XKK)\n");}
             sne_Vx_kk(chip8);
             break;
         
         case 0x5000:
-            printf("Skip next instr Vx == Vy (5XY0)\n");
+            if (logging) {printf("Skip next instr Vx == Vy (5XY0)\n");}
             se_Vx_Vy(chip8);
             break;
 
         case 0x6000:
-            printf("Instruction Load Vx reg (6XKK)\n");
+            if (logging) {printf("Instruction Load Vx reg (6XKK)\n");}
             ld_Vx(chip8);
             break;
 
         case 0x7000:
-            printf("Instruction ADD Vx reg immediate (7XKK)\n");
+            if (logging) {printf("Instruction ADD Vx reg immediate (7XKK)\n");}
             add_Vx_imm(chip8);
             break;
 
         case 0x8000:
             switch(opcode & 0x000F) {
                 case 0x0000:
-                    printf("Instruction Move Vy reg into Vx reg (8XY0)\n");
+                    if (logging) {printf("Instruction Move Vy reg into Vx reg (8XY0)\n");}
                     move_Vx_Vy(chip8);
                     break;
                     
                 case 0x0001:
-                    printf("Instruction OR (8XY1)\n");
+                    if (logging) {printf("Instruction OR (8XY1)\n");}
                     or_Vx_Vy(chip8);
                     break;
 
                 case 0x0002:
-                    printf("Instruction AND (8XY2)\n");
+                    if (logging) {printf("Instruction AND (8XY2)\n");}
                     and_Vx_Vy(chip8);
                     break;
 
                 case 0x0003:
-                    printf("Instruction XOR (8XY3)\n");
+                    if (logging) {printf("Instruction XOR (8XY3)\n");}
                     xor_Vx_Vy(chip8);
                     break;
 
                 case 0x0004:
-                    printf("Instruction ADD VX VY (8XY4)\n");
+                    if (logging) {printf("Instruction ADD VX VY (8XY4)\n");}
                     add_Vx_Vy(chip8);
                     break;
 
@@ -197,34 +197,34 @@ void execute_instruction(Chip8 *chip8) {
                 break;
 
         case 0xA000:
-            printf("Instruction LDI (ANNN)\n");
+            if (logging) {printf("Instruction LDI (ANNN)\n");}
             ldi(chip8);
             break;
 
         case 0xB000:
-            printf("Instruction JUMP + V0 (BNNN)\n");
+            if (logging) {printf("Instruction JUMP + V0 (BNNN)\n");}
             jump_V0(chip8);
             break;
 
         case 0xC000:
-            printf("Instruction RNG Vx (CXKK)\n");
+            if (logging) {printf("Instruction RNG Vx (CXKK)\n");}
             rnd(chip8);
             break;
 
         case 0xD000:
-            printf("Draw Sprite (DXYN)\n");
+            if (logging) {printf("Draw Sprite (DXYN)\n");}
             drw(chip8);
             break;
 
         case 0xE000:
             switch(opcode & 0x00FF) {
                 case 0x009E:
-                    printf("Instruction Skip next instr if key pressed (009E)\n");
+                    if (logging) {printf("Instruction Skip next instr if key pressed (009E)\n");}
                     skp(chip8);
                     break;
 
                 case 0x00A1:
-                    printf("Instruction Skip next instr if key not pressed (00A1)\n");
+                    if (logging) {printf("Instruction Skip next instr if key not pressed (00A1)\n");}
                     sknp(chip8);
                     break;
 
@@ -237,22 +237,22 @@ void execute_instruction(Chip8 *chip8) {
         case 0xF000:
             switch(opcode & 0x00FF) {
                 case 0x0007:
-                    printf("Instruction Load VX with Delay Timer (0007)\n");
+                    if (logging) {printf("Instruction Load VX with Delay Timer (0007)\n");}
                     ld_Vx_dt(chip8);
                     break;
 
                 case 0x0015:
-                    printf("Instruction Load Delay Timer with VX (0015)\n");
+                    if (logging) {printf("Instruction Load Delay Timer with VX (0015)\n");}
                     ld_dt_Vx(chip8);
                     break;
 
                 case 0x0018:
-                    printf("Instruction Load SOUND Timer with VX (0018)\n");
+                    if (logging) {printf("Instruction Load SOUND Timer with VX (0018)\n");}
                     ld_st_Vx(chip8);
                     break;
 
                 case 0x001E:
-                    printf("Instruction ADD Index and Vx (001E)\n");
+                    if (logging) {printf("Instruction ADD Index and Vx (001E)\n");}
                     add_i_Vx(chip8);
                     break;
 
@@ -282,7 +282,7 @@ void process_user_input(Chip8 *chip8) {
 
                 case SDLK_SPACE:
                     // TODO: Add Pause Functionality
-                    printf("Pausing the emulator not yet implemented");
+                    printf("Pausing the emulator not yet implemented\n");
                     break;
 
                 default:
