@@ -94,6 +94,10 @@ void init_system(Chip8 *chip8) {
 }
 
 
+/* 
+* Fetches the next opcode to execute from memory which is
+* located at the pc_reg and the pc_reg + 1 (opcode is 2 bytes)
+*/
 uint16_t fetch_opcode(Chip8 *chip8) {
     uint16_t opcode;
     uint8_t msB = chip8->ram[chip8->pc_reg];
@@ -105,6 +109,12 @@ uint16_t fetch_opcode(Chip8 *chip8) {
 }
 
 
+/* 
+* Calls the instruction to execute based on the fetched opcode.
+*
+* If logging is enabled, the program will print the opcode and what
+* instruction was ran.
+*/
 void execute_instruction(Chip8 *chip8, int logging) {
     uint16_t opcode = fetch_opcode(chip8);
     chip8->current_op = opcode;
@@ -268,6 +278,15 @@ void execute_instruction(Chip8 *chip8, int logging) {
     }
 }
 
+
+/* 
+* Gets user input and updates the keyboard key status based on what keys 
+* were or were not pressed.
+*
+* Also checks for key presses that have other functionality in the emulator
+*   ESC: Exit Emulator
+*   Spacebar: Pause Emulator (not yet implemented)
+*/
 void process_user_input(Chip8 *chip8) {
     SDL_Event e;
     while (SDL_PollEvent(&e)) {
@@ -289,7 +308,7 @@ void process_user_input(Chip8 *chip8) {
                     break;
                 }
 
-            // updates each key state in the keyboard array based on their pressed status
+            // updates each key state in the keyboard array based on their pressed status (TRUE if pressed)
             for (int i = 0; i < NUM_KEYS; i++) {
                 if (e.key.keysym.sym == KEYMAP[i]) {
                     chip8->keyboard[i] = TRUE;
@@ -297,7 +316,14 @@ void process_user_input(Chip8 *chip8) {
             }
          }
 
-         // checks for keys that were not pressed, updates their state in the keyboard
+         // checks for keys that were not pressed, updates their state in the keyboard to FALSE
+         if (e.type == SDL_KEYUP) {
+             for (int i = 0; i < NUM_KEYS; i++) {
+                if (e.key.keysym.sym == KEYMAP[i]) {
+                    chip8->keyboard[i] = FALSE;
+                }
+            }
+         } 
     }
 }
 
