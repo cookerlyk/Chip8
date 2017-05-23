@@ -72,7 +72,12 @@ void init_system(Chip8 *chip8) {
     chip8->sp_reg = 0;
     chip8->I_reg = 0;
 
-    // TODO: Clear display
+    // Clear display (memory)
+    for (int i = 0; i < SCREEN_WIDTH; i++) {
+        for (int j = 0; j < SCREEN_HEIGHT; j++) {
+            chip8->screen[i][j] = 0;
+        }
+    }
 
     // Clear stack
     for (int i = 0; i < STACK_SIZE; i++) {
@@ -94,9 +99,9 @@ void init_system(Chip8 *chip8) {
         chip8->ram[i] = fontset[i];
     }
 
-    // Reset timers to their max values
-    chip8->delay_timer = TIMER_MAX;
-    chip8->sound_timer = TIMER_MAX;
+    // Set timers to 0
+    chip8->delay_timer = 0;
+    chip8->sound_timer = 0;
 }
 
 
