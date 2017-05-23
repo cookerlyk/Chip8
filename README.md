@@ -1,7 +1,7 @@
 # Chip8
 Chip 8 Interpreter written in C:
 
-14/35 instructions are implimented<br>
+24/34 instructions are implimented<br>
 
 The next step is to get the screen and user input working with SDL2.
 
