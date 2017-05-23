@@ -74,6 +74,9 @@ struct Chip8_t {
     uint8_t keyboard[NUM_KEYS];
     uint8_t was_key_pressed;
     uint8_t waiting_for_key;
+
+    // Status of the emulator
+    uint8_t is_running;
 };
 
 #endif // CHIP8_T_H

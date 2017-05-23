@@ -47,6 +47,8 @@ int load_rom(Chip8 *chip8, const char *rom_filename) {
 */
 void init_system(Chip8 *chip8) {
 
+    chip8->is_running = TRUE;
+
     chip8->pc_reg = PC_START;
     chip8->current_op = 0;
     chip8->sp_reg = 0;
@@ -266,6 +268,39 @@ void execute_instruction(Chip8 *chip8) {
     }
 }
 
+void process_user_input(Chip8 *chip8) {
+    SDL_Event e;
+    while (SDL_PollEvent(&e)) {
+
+        // Check for keys that were pressed
+        if (e.type == SDL_KEYDOWN) {
+
+            switch (e.key.keysym.sym) {
+                case SDLK_ESCAPE:
+                    chip8->is_running = FALSE;
+                    break;
+
+                case SDLK_SPACE:
+                    // TODO: Add Pause Functionality
+                    printf("Pausing the emulator not yet implemented");
+                    break;
+
+                default:
+                    break;
+                }
+
+            // updates each key state in the keyboard array based on their pressed status
+            for (int i = 0; i < NUM_KEYS; i++) {
+                if (e.key.keysym.sym == KEYMAP[i]) {
+                    chip8->keyboard[i] = TRUE;
+                }
+            }
+         }
+
+         // checks for keys that were not pressed, updates their state in the keyboard
+    }
+}
+
 
 /*****************************
 * Start of debugging functions
@@ -287,6 +322,11 @@ void print_regs(Chip8 *chip8) {
     // print stack
     // for (int i = 0; i < STACK_SIZE; i++) {
     //     printf("Stack Element %i: 0x%X\n",i , chip8->stack[i]);
+    // }
+
+    // print keyboard
+    // for (int i = 0; i < NUM_KEYS; i++) {
+    //     printf("Keyboard Key %X: %i\n",i , chip8->keyboard[i]);
     // }
 }
 
