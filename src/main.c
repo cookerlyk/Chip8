@@ -5,19 +5,25 @@
 * the name and path of the rom the user wants to run on the system. 
 *
 * Example startup input: <unix> ./chip8 rom_dir/rom_name
+* 
+* To enable command line logging: <unix> ./chip8 rom_dir/rom_name log
 */
 
-
+#include <string.h>
 #include "chip8.h"
 #include "screen.h"
 
 
 int main (int argc, char *argv[]) {
-
     srand(time(NULL));  // seed the RNG
+    int logging = FALSE;
+
+    // check the command line argv[2] to see if logging is enabled
+    if (argv[2] != NULL && strcmp(argv[2], "log") == 0) {
+        logging = TRUE;
+    }
 
     Chip8 user_chip8;
-
     SDL_Window *chip8_screen;
     SDL_Renderer *renderer;
     SDL_Init(SDL_INIT_VIDEO);
@@ -42,6 +48,10 @@ int main (int argc, char *argv[]) {
     SDL_RenderClear(renderer);
     // This will show the new contents of the window.
     SDL_RenderPresent(renderer);
+    /**********************************************
+    * end test initial drawing code
+    ***********************************************/
+
 
 
     // TODO: setup input
@@ -52,12 +62,14 @@ int main (int argc, char *argv[]) {
 
     // System loop
     uint8_t color_shift = 0;
-    while(TRUE){
+    while(user_chip8.is_running){
         execute_instruction(&user_chip8);
 
-        // Test register printout 
-        print_regs(&user_chip8);
-
+        // Register printout if logging command line arg entered
+        if (logging) {
+            print_regs(&user_chip8);
+        }
+        
         // draw graphics
         SDL_SetRenderDrawColor(renderer, 0, color_shift, 0, 0);
         SDL_RenderClear(renderer);
@@ -67,11 +79,9 @@ int main (int argc, char *argv[]) {
         }
         color_shift++;
         
-        // key input state stored
+        // Store key input states and check for user exit command
+        process_user_input(&user_chip8);
     }
-
-    SDL_Delay(5000);  // Pause execution for 3000 milliseconds, for example
-
 
     // Close and destroy the window
     close_window(chip8_screen);
