@@ -150,9 +150,8 @@ void move_Vx_Vy(Chip8 *chip8) {
 void or_Vx_Vy(Chip8 *chip8) {
     uint8_t target_v_reg_x = (chip8->current_op & 0x0F00) >> 8;
     uint8_t target_v_reg_y = (chip8->current_op & 0x00F0) >> 4;
-    uint8_t regs_or = (chip8->V[target_v_reg_x] | chip8->V[target_v_reg_y]);
 
-    chip8->V[target_v_reg_x] = regs_or;
+    chip8->V[target_v_reg_x] = (chip8->V[target_v_reg_x] | chip8->V[target_v_reg_y]);
     chip8->pc_reg += 2;
 }
 
@@ -164,9 +163,8 @@ void or_Vx_Vy(Chip8 *chip8) {
 void and_Vx_Vy(Chip8 *chip8) {
     uint8_t target_v_reg_x = (chip8->current_op & 0x0F00) >> 8;
     uint8_t target_v_reg_y = (chip8->current_op & 0x00F0) >> 4;
-    uint8_t regs_and = (chip8->V[target_v_reg_x] & chip8->V[target_v_reg_y]);
 
-    chip8->V[target_v_reg_x] = regs_and;
+    chip8->V[target_v_reg_x] = (chip8->V[target_v_reg_x] & chip8->V[target_v_reg_y]);
     chip8->pc_reg += 2;
 }
 
@@ -178,9 +176,8 @@ void and_Vx_Vy(Chip8 *chip8) {
 void xor_Vx_Vy(Chip8 *chip8) {
     uint8_t target_v_reg_x = (chip8->current_op & 0x0F00) >> 8;
     uint8_t target_v_reg_y = (chip8->current_op & 0x00F0) >> 4;
-    uint8_t regs_xor = (chip8->V[target_v_reg_x] ^ chip8->V[target_v_reg_y]);
 
-    chip8->V[target_v_reg_x] = regs_xor;
+    chip8->V[target_v_reg_x] = (chip8->V[target_v_reg_x] ^ chip8->V[target_v_reg_y]);
     chip8->pc_reg += 2;
 }
 
@@ -258,21 +255,36 @@ void drw(Chip8 *chip8) {
 
 /*
 * Opcode EX9E: Skip next instruction if key pressed
-* Skips the next instruciton if the key with value V[X] is pressed
+* Skips the next instruction if the key with value V[X] is pressed
 */
 void skp(Chip8 *chip8) {
-    printf("Input not yet implemented...\n");
-    chip8->pc_reg += 2;
+    uint8_t target_v_reg = (chip8->current_op & 0x0F00) >> 8;
+    uint8_t vX_value = chip8->V[target_v_reg];
+
+    if (chip8->keyboard[vX_value] != FALSE) {
+        chip8->pc_reg += 4;
+    }
+    else {
+        chip8->pc_reg += 2;
+    }
+    
 }
 
 
 /*
 * Opcode EXA1: Skip next instruction if key not pressed
-* Skips the next instruciton if the key with value V[X] is not pressed
+* Skips the next instruction if the key with value V[X] is not pressed
 */
 void sknp(Chip8 *chip8) {
-    printf("Input not yet implemented...\n");
-    chip8->pc_reg += 2;
+    uint8_t target_v_reg = (chip8->current_op & 0x0F00) >> 8;
+    uint8_t vX_value = chip8->V[target_v_reg];
+
+    if (chip8->keyboard[vX_value] == FALSE) {
+        chip8->pc_reg += 4;
+    }
+    else {
+        chip8->pc_reg += 2;
+    }
 }
 
 
