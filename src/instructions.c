@@ -267,7 +267,6 @@ void skp(Chip8 *chip8) {
     else {
         chip8->pc_reg += 2;
     }
-    
 }
 
 

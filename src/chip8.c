@@ -328,6 +328,22 @@ void process_user_input(Chip8 *chip8) {
 }
 
 
+/* 
+* Updates the system timers for the emulator
+*
+* If the delay_timer or the sound_timer are > 0
+* the corrisponding timer is decremented by 1
+*/
+void update_timers(Chip8 *chip8) {
+    if (chip8->delay_timer > 0) {
+        chip8->delay_timer--;
+    }
+    if (chip8->sound_timer > 0) {
+        chip8->sound_timer--;
+    }
+}
+
+
 /*****************************
 * Start of debugging functions
 ******************************/

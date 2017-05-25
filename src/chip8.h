@@ -32,6 +32,7 @@ void init_system(Chip8 *chip8);
 uint16_t fetch_opcode(Chip8 *chip8);
 void execute_instruction(Chip8 *chip8, int logging);
 void process_user_input(Chip8 *chip8);
+void update_timers(Chip8 *chip8);
 
 // Debugging functions
 void print_regs(Chip8 *chip8);
