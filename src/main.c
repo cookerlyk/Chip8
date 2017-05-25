@@ -25,43 +25,27 @@ int main (int argc, char *argv[]) {
 
     Chip8 user_chip8;
     SDL_Window *chip8_screen;
-    SDL_Renderer *renderer;
+    SDL_Renderer *chip8_renderer;
+    
+    // Setup the window
     SDL_Init(SDL_INIT_VIDEO);
+    init_window(&chip8_screen, &chip8_renderer);
 
-    chip8_screen = SDL_CreateWindow(
-        "CHIP8",                           // window label
-        SDL_WINDOWPOS_CENTERED,            // initial x position
-        SDL_WINDOWPOS_CENTERED,            // initial y position
-        WINDOW_WIDTH,                      // width
-        WINDOW_HEIGHT,                     // height
-        SDL_WINDOW_OPENGL                  // flags
-    );
-
-    /**********************************************
-    * test initial drawing code
-    ***********************************************/
-    // We must call SDL_CreateRenderer in order for draw calls to affect this window.
-    renderer = SDL_CreateRenderer(chip8_screen, -1, 0);
-    // Place a black background to start
-    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
-    // Clear the entire screen to our selected color.
-    SDL_RenderClear(renderer);
-    // This will show the new contents of the window.
-    SDL_RenderPresent(renderer);
-    /**********************************************
-    * end test initial drawing code
-    ***********************************************/
-
-
-
-    // TODO: setup input
+    // Put the emulator into its startup state
     init_system(&user_chip8);
 
-    // TODO: handle if the rom load fails
+    // TODO: handle if the rom load fails?
     load_rom(&user_chip8, argv[1]);
 
-    // System loop
-    uint8_t color_shift = 0;
+
+    /* 
+    * Main system loop begins here:
+    * 1: Single instruction is executed
+    * 2: Graphics are drawn to the screen
+    * 3: User input is processed
+    * 4: Timers are updated
+    */
+    // int color_shift = 0;
     while(user_chip8.is_running){
         execute_instruction(&user_chip8, logging);
 
@@ -70,17 +54,19 @@ int main (int argc, char *argv[]) {
             print_regs(&user_chip8);
         }
         
-        // draw graphics
-        SDL_SetRenderDrawColor(renderer, 0, color_shift, 0, 0);
-        SDL_RenderClear(renderer);
-        SDL_RenderPresent(renderer);
-        if (color_shift == 255) {
-            color_shift = 0;
-        }
-        color_shift++;
-        
+        // draw graphics TEST
+        // printf("%i\n", color_shift);
+        // if (color_shift == 500000) {
+        //     render_graphics(chip8_renderer);
+        //     break;
+        // }
+        // color_shift++;
+
+        render_graphics(chip8_renderer);
+
         // Store key input states and check for user exit command
         process_user_input(&user_chip8);
+        update_timers(&user_chip8);
     }
 
     // Close and destroy the window
