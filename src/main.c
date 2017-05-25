@@ -31,49 +31,39 @@ int main (int argc, char *argv[]) {
     SDL_Init(SDL_INIT_VIDEO);
     init_window(&chip8_screen, &chip8_renderer);
 
-    // Put the emulator into its startup state
+    // Initilize the emulator into its startup state
     init_system(&user_chip8);
 
     // TODO: handle if the rom load fails?
     load_rom(&user_chip8, argv[1]);
 
-
     /* 
     * Main system loop begins here:
     * 1: Single instruction is executed
-    * 2: Graphics are drawn to the screen
+    * 2: Graphics are drawn to the screen (if draw flag set to true)
     * 3: User input is processed
     * 4: Timers are updated
     */
-    // int color_shift = 0;
-    while(user_chip8.is_running){
+    while(user_chip8.is_running_flag){
         execute_instruction(&user_chip8, logging);
 
         // Register printout if logging command line arg entered
-        if (logging) {
-            print_regs(&user_chip8);
+        if (logging) {print_regs(&user_chip8);}
+
+        // If the draw screen flag was set to true during the last 
+        // instruction, render the updated screen and then clear the flag
+        if (user_chip8.draw_screen_flag) {
+            render_graphics(chip8_renderer);
+            user_chip8.draw_screen_flag = FALSE;
         }
         
-        // draw graphics TEST
-        // printf("%i\n", color_shift);
-        // if (color_shift == 500000) {
-        //     render_graphics(chip8_renderer);
-        //     break;
-        // }
-        // color_shift++;
-
-        render_graphics(chip8_renderer);
-
         // Store key input states and check for user exit command
         process_user_input(&user_chip8);
         update_timers(&user_chip8);
     }
 
-    // Close and destroy the window
-    close_window(chip8_screen);
+    // Close and destroy the window (only called when the program is exited)
+    close_window(chip8_screen, chip8_renderer);
 
-        
     return 0;
 }
-
-

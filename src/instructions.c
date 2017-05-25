@@ -249,6 +249,7 @@ void rnd(Chip8 *chip8) {
 */
 void drw(Chip8 *chip8) {
     printf("Display not yet implemented...\n");
+    chip8->draw_screen_flag = TRUE;
     chip8->pc_reg += 2;
 }
 

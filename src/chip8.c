@@ -47,7 +47,8 @@ int load_rom(Chip8 *chip8, const char *rom_filename) {
 */
 void init_system(Chip8 *chip8) {
 
-    chip8->is_running = TRUE;
+    chip8->is_running_flag = TRUE;
+    chip8->draw_screen_flag = FALSE;
 
     chip8->pc_reg = PC_START;
     chip8->current_op = 0;
@@ -296,7 +297,7 @@ void process_user_input(Chip8 *chip8) {
 
             switch (e.key.keysym.sym) {
                 case SDLK_ESCAPE:
-                    chip8->is_running = FALSE;
+                    chip8->is_running_flag = FALSE;
                     break;
 
                 case SDLK_SPACE:

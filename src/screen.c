@@ -36,14 +36,19 @@ void init_window(SDL_Window **window, SDL_Renderer **renderer) {
 
 
 void render_graphics(SDL_Renderer *renderer) {
-    SDL_SetRenderDrawColor(renderer, 0, 255, 0, 0);
-    SDL_RenderClear(renderer);
+    // White pixels
+    SDL_SetRenderDrawColor(renderer, 255, 255, 255, 0);
+
+    SDL_RenderDrawPoint(renderer, 400, 300);
+    
+    // SDL_RenderClear(renderer);
     SDL_RenderPresent(renderer);
 }
 
 
-void close_window(SDL_Window *window) {
+void close_window(SDL_Window *window, SDL_Renderer* renderer) {
     SDL_DestroyWindow(window);
+    SDL_DestroyRenderer(renderer);
     SDL_Quit();
 }
 

@@ -8,6 +8,6 @@
 
 void init_window(SDL_Window **window, SDL_Renderer **renderer);
 void render_graphics(SDL_Renderer *renderer);
-void close_window(SDL_Window *window);
+void close_window(SDL_Window *window, SDL_Renderer* renderer);
 
 #endif // SCREEN_H
