@@ -52,7 +52,7 @@ void buffer_graphics(Chip8 *chip8, uint32_t *buffer, SDL_Renderer *renderer) {
     for (int i = 0; i < SCREEN_HEIGHT; i++) {
         for (int j = 0; j < SCREEN_WIDTH; j++) {
             uint8_t pixel = chip8->screen[i][j];
-            buffer[(i * SCREEN_WIDTH) + j] = (0x00FFFFFF * pixel) | 0xFF000000;
+            buffer[(i * SCREEN_WIDTH) + j] = (0xFFFFFF00 * pixel) | 0x000000FF;
         }
     }
 }
