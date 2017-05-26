@@ -248,7 +248,15 @@ void rnd(Chip8 *chip8) {
 * Draws sprite at location X, Y. Set VF if collision
 */
 void drw(Chip8 *chip8) {
-    printf("Display not yet implemented...\n");
+    //printf("Display not yet implemented...\n");
+
+    // TEST: Shift to an all white screen
+    for (int i = 0; i < SCREEN_WIDTH; i++) {
+        for (int j = 0; j < SCREEN_HEIGHT; j++) {
+            chip8->screen[i][j] = 1;
+        }
+    }
+
     chip8->draw_screen_flag = TRUE;
     chip8->pc_reg += 2;
 }

@@ -19,22 +19,22 @@ int main (int argc, char *argv[]) {
     int logging = FALSE;
 
     // check the command line argv[2] to see if logging is enabled
-    if (argv[2] != NULL && strcmp(argv[2], "log") == 0) {
-        logging = TRUE;
-    }
+    if (argv[2] != NULL && strcmp(argv[2], "log") == 0) {logging = TRUE;}
 
     Chip8 user_chip8;
     SDL_Window *chip8_screen;
     SDL_Renderer *chip8_renderer;
+    SDL_Texture *chip8_texture;
+
+    // Creates a buffer to store the pixel status for the emulator screen
+    uint32_t *pixel_buffer = malloc(SCREEN_WIDTH * SCREEN_HEIGHT*sizeof(uint32_t));
     
     // Setup the window
     SDL_Init(SDL_INIT_VIDEO);
-    init_window(&chip8_screen, &chip8_renderer);
+    init_window(&chip8_screen, &chip8_renderer, &chip8_texture);
 
-    // Initilize the emulator into its startup state
+    // Initilize the emulator into its startup state and load rom into memory
     init_system(&user_chip8);
-
-    // TODO: handle if the rom load fails?
     load_rom(&user_chip8, argv[1]);
 
     /* 
@@ -47,13 +47,14 @@ int main (int argc, char *argv[]) {
     while(user_chip8.is_running_flag){
         execute_instruction(&user_chip8, logging);
 
-        // Register printout if logging command line arg entered
+        // DEBUG: Register printout if logging
         if (logging) {print_regs(&user_chip8);}
 
         // If the draw screen flag was set to true during the last 
         // instruction, render the updated screen and then clear the flag
         if (user_chip8.draw_screen_flag) {
-            render_graphics(chip8_renderer);
+            buffer_graphics(&user_chip8, pixel_buffer, chip8_renderer);
+            draw_graphics(pixel_buffer, chip8_renderer, chip8_texture);
             user_chip8.draw_screen_flag = FALSE;
         }
         
@@ -63,7 +64,8 @@ int main (int argc, char *argv[]) {
     }
 
     // Close and destroy the window (only called when the program is exited)
-    close_window(chip8_screen, chip8_renderer);
+    close_window(chip8_screen, chip8_renderer, chip8_texture);
+    free(pixel_buffer);
 
     return 0;
 }
