@@ -11,7 +11,10 @@ void init_window(SDL_Window **window, SDL_Renderer **renderer, SDL_Texture **tex
         SDL_WINDOWPOS_CENTERED,            // initial y position
         WINDOW_WIDTH,
         WINDOW_HEIGHT,
-        SDL_WINDOW_OPENGL                  // flags
+        SDL_WINDOW_SHOWN |
+        SDL_WINDOW_OPENGL | 
+        SDL_WINDOW_RESIZABLE |
+        SDL_WINDOW_ALLOW_HIGHDPI           // flags
     );
 
     // Check that the window was successfully created
@@ -49,10 +52,10 @@ void init_window(SDL_Window **window, SDL_Renderer **renderer, SDL_Texture **tex
 
 
 void buffer_graphics(Chip8 *chip8, uint32_t *buffer, SDL_Renderer *renderer) {
-    for (int i = 0; i < SCREEN_HEIGHT; i++) {
-        for (int j = 0; j < SCREEN_WIDTH; j++) {
-            uint8_t pixel = chip8->screen[i][j];
-            buffer[(i * SCREEN_WIDTH) + j] = (0xFFFFFF00 * pixel) | 0x000000FF;
+    for (int y = 0; y < SCREEN_HEIGHT; y++) {
+        for (int x = 0; x < SCREEN_WIDTH; x++) {
+            uint8_t pixel = chip8->screen[y][x];
+            buffer[(y * SCREEN_WIDTH) + x] = (0xFFFFFF00 * pixel) | 0x000000FF;
         }
     }
 }

@@ -68,7 +68,7 @@ struct Chip8_t {
     uint16_t current_op;             // current opcode being executed by the system
 
     // screen
-    uint8_t screen[SCREEN_WIDTH][SCREEN_HEIGHT];
+    uint8_t screen[SCREEN_HEIGHT][SCREEN_WIDTH];
 
     // keys (16)
     uint8_t keyboard[NUM_KEYS];

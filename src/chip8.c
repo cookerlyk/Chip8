@@ -56,8 +56,8 @@ void init_system(Chip8 *chip8) {
     chip8->I_reg = 0;
 
     // Clear display (memory)
-    for (int i = 0; i < SCREEN_WIDTH; i++) {
-        for (int j = 0; j < SCREEN_HEIGHT; j++) {
+    for (int i = 0; i < SCREEN_HEIGHT; i++) {
+        for (int j = 0; j < SCREEN_WIDTH; j++) {
             chip8->screen[i][j] = 0;
         }
     }
@@ -267,6 +267,11 @@ void execute_instruction(Chip8 *chip8, int logging) {
                     add_i_Vx(chip8);
                     break;
 
+                case 0x0029:
+                    if (logging) {printf("Instruction LOAD Font from VX value (0029)\n");}
+                    ld_F_Vx(chip8);
+                    break;
+
                 default:
                     printf("ERROR: Unrecognized opcode 0x%X\n", opcode);
                     exit(EXIT_FAILURE);
@@ -324,6 +329,11 @@ void process_user_input(Chip8 *chip8) {
                     chip8->keyboard[i] = FALSE;
                 }
             }
+         }
+
+         // Checks for the 'x' button on the window to be pressed
+         if (e.type == SDL_QUIT) {
+            chip8->is_running_flag = FALSE;
          } 
     }
 }

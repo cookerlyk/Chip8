@@ -27,10 +27,10 @@ int main (int argc, char *argv[]) {
     SDL_Texture *chip8_texture;
 
     // Creates a buffer to store the pixel status for the emulator screen
-    uint32_t *pixel_buffer = malloc(SCREEN_WIDTH * SCREEN_HEIGHT*sizeof(uint32_t));
+    uint32_t *pixel_buffer = malloc((SCREEN_HEIGHT * SCREEN_WIDTH) * sizeof(uint32_t));
     
     // Setup the window
-    SDL_Init(SDL_INIT_VIDEO);
+    SDL_Init(SDL_INIT_EVERYTHING);
     init_window(&chip8_screen, &chip8_renderer, &chip8_texture);
 
     // Initilize the emulator into its startup state and load rom into memory
@@ -61,6 +61,9 @@ int main (int argc, char *argv[]) {
         // Store key input states and check for user exit command
         process_user_input(&user_chip8);
         update_timers(&user_chip8);
+
+        // TODO: Actually slow down emulation better than this
+        SDL_Delay(10);
     }
 
     // Close and destroy the window (only called when the program is exited)

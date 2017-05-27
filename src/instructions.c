@@ -6,8 +6,8 @@
 * Display (memory) is cleared
 */
 void cls(Chip8 *chip8) {
-    for (int i = 0; i < SCREEN_WIDTH; i++) {
-        for (int j = 0; j < SCREEN_HEIGHT; j++) {
+    for (int i = 0; i < SCREEN_HEIGHT; i++) {
+        for (int j = 0; j < SCREEN_WIDTH; j++) {
             chip8->screen[i][j] = 0;
         }
     }
@@ -245,15 +245,30 @@ void rnd(Chip8 *chip8) {
 
 /*
 * Opcode DXYN: Display N-byte sprite at ram[I_reg]
-* Draws sprite at location X, Y. Set VF if collision
+* Draws sprite at location V[X], V[Y]. Set V[F] if collision
+*
+* Initial source of implimentation used as template found below:
+* http://www.multigesture.net/articles/how-to-write-an-emulator-chip-8-interpreter/
 */
 void drw(Chip8 *chip8) {
-    //printf("Display not yet implemented...\n");
+    uint8_t target_v_reg_x = (chip8->current_op & 0x0F00) >> 8;
+    uint8_t target_v_reg_y = (chip8->current_op & 0x00F0) >> 4;
+    uint8_t n = chip8->current_op & 0x000F;
+    uint8_t x_location = chip8->V[target_v_reg_x];
+    uint8_t y_location = chip8->V[target_v_reg_y];
+    uint8_t pixel;
 
-    // TEST: Shift to an all white screen
-    for (int i = 0; i < SCREEN_WIDTH; i++) {
-        for (int j = 0; j < SCREEN_HEIGHT; j++) {
-            chip8->screen[i][j] = 1;
+    // Reset collision register to FALSE
+    chip8->V[0xF] = FALSE;
+    for (int y_coordinate = 0; y_coordinate < SCREEN_HEIGHT; y_coordinate++) {
+        pixel = chip8->ram[chip8->I_reg + y_coordinate];
+        for (int x_coordinate = 0; x_coordinate < 8; x_coordinate++) {
+            if ((pixel & (0x80 >> x_coordinate)) != 0) {
+                if (chip8->screen[y_location + y_coordinate][x_location + x_coordinate] == 1) {
+                    chip8->V[0xF] = TRUE;
+                }
+                chip8->screen[y_location + y_coordinate][x_location + x_coordinate] ^= 1;
+            }
         }
     }
 
@@ -343,5 +358,18 @@ void add_i_Vx(Chip8 *chip8) {
     uint8_t vX_value = chip8->V[target_v_reg];
 
     chip8->I_reg = chip8->I_reg + vX_value;
+    chip8->pc_reg += 2;
+}
+
+
+/*
+* Opcode FX29: LD F, VX
+* I_reg set to value of location of hex sprite value in V[X] * 5
+*/
+void ld_F_Vx(Chip8 *chip8) {
+    uint8_t target_v_reg = (chip8->current_op & 0x0F00) >> 8;
+    uint8_t vX_value = chip8->V[target_v_reg];
+
+    chip8->I_reg = (vX_value * 0x5);
     chip8->pc_reg += 2;
 }
