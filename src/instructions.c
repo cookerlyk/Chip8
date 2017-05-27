@@ -1,6 +1,5 @@
 #include "instructions.h"
 
-
 /*
 * Opcode 00E0: Clear the display
 * Display (memory) is cleared
@@ -121,10 +120,9 @@ void ld_Vx(Chip8 *chip8) {
 void add_Vx_imm(Chip8 *chip8) {
     uint8_t target_v_reg = (chip8->current_op & 0x0F00) >> 8;
     uint8_t kk = chip8->current_op & 0x00FF;
-    uint8_t vX_value = chip8->V[target_v_reg];
     
     // TODO: What if there is overflow?
-    chip8->V[target_v_reg] = vX_value + kk;;
+    chip8->V[target_v_reg] += kk;;
     chip8->pc_reg += 2;
 }
 
@@ -136,9 +134,8 @@ void add_Vx_imm(Chip8 *chip8) {
 void move_Vx_Vy(Chip8 *chip8) {
     uint8_t target_v_reg_x = (chip8->current_op & 0x0F00) >> 8;
     uint8_t target_v_reg_y = (chip8->current_op & 0x00F0) >> 4;
-    uint8_t vY_value = chip8->V[target_v_reg_y];
     
-    chip8->V[target_v_reg_x] = vY_value;
+    chip8->V[target_v_reg_x] = chip8->V[target_v_reg_y];
     chip8->pc_reg += 2;
 }
 
@@ -329,9 +326,8 @@ void ld_Vx_dt(Chip8 *chip8) {
 */
 void ld_dt_Vx(Chip8 *chip8) {
     uint8_t target_v_reg = (chip8->current_op & 0x0F00) >> 8;
-    uint8_t vX_value = chip8->V[target_v_reg];
 
-    chip8->delay_timer = vX_value;
+    chip8->delay_timer = chip8->V[target_v_reg];
     chip8->pc_reg += 2;
 }
 
@@ -342,9 +338,8 @@ void ld_dt_Vx(Chip8 *chip8) {
 */
 void ld_st_Vx(Chip8 *chip8) {
     uint8_t target_v_reg = (chip8->current_op & 0x0F00) >> 8;
-    uint8_t vX_value = chip8->V[target_v_reg];
 
-    chip8->sound_timer = vX_value;
+    chip8->sound_timer = chip8->V[target_v_reg];
     chip8->pc_reg += 2;
 }
 
@@ -355,9 +350,8 @@ void ld_st_Vx(Chip8 *chip8) {
 */
 void add_i_Vx(Chip8 *chip8) {
     uint8_t target_v_reg = (chip8->current_op & 0x0F00) >> 8;
-    uint8_t vX_value = chip8->V[target_v_reg];
 
-    chip8->I_reg = chip8->I_reg + vX_value;
+    chip8->I_reg = chip8->I_reg + chip8->V[target_v_reg];
     chip8->pc_reg += 2;
 }
 
@@ -368,8 +362,7 @@ void add_i_Vx(Chip8 *chip8) {
 */
 void ld_F_Vx(Chip8 *chip8) {
     uint8_t target_v_reg = (chip8->current_op & 0x0F00) >> 8;
-    uint8_t vX_value = chip8->V[target_v_reg];
 
-    chip8->I_reg = (vX_value * 0x5);
+    chip8->I_reg = (chip8->V[target_v_reg] * 0x5);
     chip8->pc_reg += 2;
 }

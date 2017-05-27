@@ -3,8 +3,6 @@ Chip 8 Interpreter written in C:
 
 24/34 instructions are implimented<br>
 
-The next step is to get the screen and user input working with SDL2.
-
 
 ## Building and Running:
 
@@ -24,6 +22,7 @@ Running from the command line with logging enabled:<br>
 ### Dependencies:
 GNU C compiler<br>
 SDL2 <br>
+A Chip-8 Rom<br>
 
 ## Keyboard Layout:
 
