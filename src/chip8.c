@@ -207,6 +207,11 @@ void execute_instruction(Chip8 *chip8, int logging) {
                 }
                 break;
 
+        case 0x9000:
+            if (logging) {printf("Skip next instr Vx != Vy (9XY0)\n");}
+            sne_Vx_Vy(chip8);
+            break;
+
         case 0xA000:
             if (logging) {printf("Instruction LDI (ANNN)\n");}
             ldi(chip8);
@@ -270,6 +275,16 @@ void execute_instruction(Chip8 *chip8, int logging) {
                 case 0x0029:
                     if (logging) {printf("Instruction LOAD Font from VX value (0029)\n");}
                     ld_F_Vx(chip8);
+                    break;
+
+                case 0x0055:
+                    if (logging) {printf("Instruction STORE Regs V[0] - V[X] starting at I register (0055)\n");}
+                    st_V_regs(chip8);
+                    break;
+
+                case 0x0065:
+                    if (logging) {printf("Instruction LOAD Regs V[0] - V[X] starting at I register (0065)\n");}
+                    ld_V_regs(chip8);
                     break;
 
                 default:

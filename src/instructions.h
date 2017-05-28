@@ -28,7 +28,7 @@ void add_Vx_Vy(Chip8 *chip8);                   // 8XY4
                                                 // 8XY6
                                                 // 8XY7
                                                 // 8XYE
-                                                // 9XY0
+void sne_Vx_Vy(Chip8 *chip8);                   // 9XY0
 void ldi(Chip8 *chip8);                         // ANNN
 void jump_V0(Chip8 *chip8);                     // BNNN
 void rnd(Chip8 *chip8);                         // CXKK
@@ -42,8 +42,8 @@ void ld_st_Vx(Chip8 *chip8);                    // FX18
 void add_i_Vx(Chip8 *chip8);                    // FX1E
 void ld_F_Vx(Chip8 *chip8);                     // FX29
                                                 // FX33
-                                                // FX55
-                                                // FX65
+void st_V_regs(Chip8 *chip8);                   // FX55
+void ld_V_regs(Chip8 *chip8);                   // FX65
 
 
 #endif // INSTRUCTIONS_H

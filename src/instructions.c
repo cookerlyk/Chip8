@@ -10,6 +10,7 @@ void cls(Chip8 *chip8) {
             chip8->screen[i][j] = 0;
         }
     }
+    chip8->draw_screen_flag = TRUE;
     chip8->pc_reg += 2;
 }
 
@@ -203,6 +204,23 @@ void add_Vx_Vy(Chip8 *chip8) {
 
 
 /*
+* Opcode 9XY0: Skip next instruction
+* Increments the pc_reg by 4 (2 instructions) if  V[X] != V[Y]
+*/
+void sne_Vx_Vy(Chip8 *chip8) {
+    uint8_t target_v_reg = (chip8->current_op & 0x0F00) >> 8;
+    uint8_t target_y_reg = (chip8->current_op & 0x00F0) >> 4;
+
+    if (chip8->V[target_v_reg] != chip8->V[target_y_reg]) {
+        chip8->pc_reg += 4;
+    }
+    else {
+        chip8->pc_reg += 2;
+    }
+}
+
+
+/*
 * Opcode ANNN: Load I immediate
 * Sets the Index register to the value of NNN
 */
@@ -250,14 +268,14 @@ void rnd(Chip8 *chip8) {
 void drw(Chip8 *chip8) {
     uint8_t target_v_reg_x = (chip8->current_op & 0x0F00) >> 8;
     uint8_t target_v_reg_y = (chip8->current_op & 0x00F0) >> 4;
-    uint8_t n = chip8->current_op & 0x000F;
+    uint8_t sprite_height = chip8->current_op & 0x000F;
     uint8_t x_location = chip8->V[target_v_reg_x];
     uint8_t y_location = chip8->V[target_v_reg_y];
     uint8_t pixel;
 
     // Reset collision register to FALSE
     chip8->V[0xF] = FALSE;
-    for (int y_coordinate = 0; y_coordinate < SCREEN_HEIGHT; y_coordinate++) {
+    for (int y_coordinate = 0; y_coordinate < sprite_height; y_coordinate++) {
         pixel = chip8->ram[chip8->I_reg + y_coordinate];
         for (int x_coordinate = 0; x_coordinate < 8; x_coordinate++) {
             if ((pixel & (0x80 >> x_coordinate)) != 0) {
@@ -364,5 +382,41 @@ void ld_F_Vx(Chip8 *chip8) {
     uint8_t target_v_reg = (chip8->current_op & 0x0F00) >> 8;
 
     chip8->I_reg = (chip8->V[target_v_reg] * 0x5);
+    chip8->pc_reg += 2;
+}
+
+
+/*
+* Opcode FX55: LD [I], Vx
+* Store V[0] - V[X] in memory starting at I_reg value
+*/
+void st_V_regs(Chip8 *chip8) {
+    uint8_t end_ld_v_reg = (chip8->current_op & 0x0F00) >> 8;
+
+    for (int i = 0; i <= end_ld_v_reg; i++) {
+        chip8->ram[chip8->I_reg + i] = chip8->V[i];
+    }
+
+    // TODO: Does I_reg need to change?
+    chip8->I_reg += (end_ld_v_reg + 1);
+
+    chip8->pc_reg += 2;
+}
+
+
+/*
+* Opcode FX65: LD Vx, I
+* Read values into V[0] - V[X] from memory starting at I_reg value
+*/
+void ld_V_regs(Chip8 *chip8) {
+    uint8_t end_ld_v_reg = (chip8->current_op & 0x0F00) >> 8;
+
+    for (int i = 0; i <= end_ld_v_reg; i++) {
+        chip8->V[i] = chip8->ram[chip8->I_reg + i];
+    }
+
+    // TODO: Does I_reg need to change?
+    chip8->I_reg += (end_ld_v_reg + 1);
+
     chip8->pc_reg += 2;
 }
