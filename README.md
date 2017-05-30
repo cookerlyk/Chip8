@@ -1,9 +1,6 @@
 # Chip8
 Chip 8 Interpreter written in C:
 
-30/34 instructions are implimented<br>
-
-
 ## Building and Running:
 
 To build the project run: <br>
