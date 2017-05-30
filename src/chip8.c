@@ -2,7 +2,7 @@
 
 
 // Load the rom into memory starting at location 0x200
-int load_rom(Chip8 *chip8, const char *rom_filename) {
+void load_rom(Chip8 *chip8, const char *rom_filename) {
     long rom_length;
     uint8_t *rom_buffer;
 
@@ -15,27 +15,32 @@ int load_rom(Chip8 *chip8, const char *rom_filename) {
 
         rom_buffer = (uint8_t*) malloc(sizeof(uint8_t) * rom_length);
         if (rom_buffer == NULL) {
-            printf("ERROR: out of memory");
-            return FALSE;
+            printf("ERROR: Out of memory");
+            exit(EXIT_FAILURE);
         }
 
         // TODO: handle error if not read into memory?
         fread(rom_buffer, sizeof(uint8_t), rom_length, rom); 
 
-        // TODO: rom size verfication? 0xfff - 0x200 >= rom_length?
-        for(int i = 0; i < rom_length; i++)
-            chip8->ram[i + 0x200] = rom_buffer[i];
+        // Check that the rom is not too large for the region in memory it is placed in
+        if ((0xFFF - 0x200) >= rom_length) {
+            for(int i = 0; i < rom_length; i++) {
+                chip8->ram[i + 0x200] = rom_buffer[i];
+            }
         }
-
+        else {
+            printf("ERROR: ROM file too large\n");
+            exit(EXIT_FAILURE);
+        }
+        
+    }
     else {
-        // TODO: handle the error better?
-        printf("ERROR: File does not exist\n");
-        return FALSE;
+        printf("ERROR: ROM file does not exist\n");
+        exit(EXIT_FAILURE);
     }
 
     fclose(rom);
     free(rom_buffer);
-    return TRUE;
 }
 
 
@@ -67,7 +72,7 @@ void init_system(Chip8 *chip8) {
         chip8->stack[i] = 0;
     }
 
-    // Clear ram, calloc instead?
+    // Clear ram
     for (int i = 0; i < TOTAL_RAM; i++) {
         chip8->ram[i] = 0;
     }
