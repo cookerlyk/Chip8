@@ -41,7 +41,7 @@ void ld_dt_Vx(Chip8 *chip8);                    // FX15
 void ld_st_Vx(Chip8 *chip8);                    // FX18
 void add_i_Vx(Chip8 *chip8);                    // FX1E
 void ld_F_Vx(Chip8 *chip8);                     // FX29
-                                                // FX33
+void st_bcd_Vx(Chip8 *chip8);                   // FX33
 void st_V_regs(Chip8 *chip8);                   // FX55
 void ld_V_regs(Chip8 *chip8);                   // FX65
 

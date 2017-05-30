@@ -301,6 +301,11 @@ void execute_instruction(Chip8 *chip8, int logging) {
                     ld_F_Vx(chip8);
                     break;
 
+                case 0x0033:
+                    if (logging) {printf("Instruction STORE BCD of VX value (0033)\n");}
+                    st_bcd_Vx(chip8);
+                    break;
+
                 case 0x0055:
                     if (logging) {printf("Instruction STORE Regs V[0] - V[X] starting at I register (0055)\n");}
                     st_V_regs(chip8);

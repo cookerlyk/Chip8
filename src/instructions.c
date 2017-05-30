@@ -227,12 +227,12 @@ void sub_Vx_Vy(Chip8 *chip8) {
 /*
 * Opcode 8XY6: SHR Vx
 * V[X] = V[X] >> 1
-* If LSB of V[X] == 1, V[F] register is set to 1, else 0
+* If LSb of V[X] == 1, V[F] register is set to 1, else 0
 */
 void shr(Chip8 *chip8) {
     uint8_t target_v_reg_x = (chip8->current_op & 0x0F00) >> 8;
 
-    // check if the LSB is 1 (odd num in V[X] will have a LSB of 1) 
+    // check if the LSb is 1 (odd num in V[X] will have a LSB of 1) 
     if (chip8->V[target_v_reg_x] % 2 == 1) {
         chip8->V[0xF] = 1;
     }
@@ -269,12 +269,12 @@ void subn_Vx_Vy(Chip8 *chip8) {
 /*
 * Opcode 8XY6: SHL Vx
 * V[X] = V[X] << 1
-* If MSB of V[X] == 1, V[F] register is set to 1, else 0
+* If MSb of V[X] == 1, V[F] register is set to 1, else 0
 */
 void shl(Chip8 *chip8) {
     uint8_t target_v_reg_x = (chip8->current_op & 0x0F00) >> 8;
 
-    // check if the MSB is 1
+    // check if the MSb is 1
     if ((chip8->V[target_v_reg_x] & 10000000) == 1) {
         chip8->V[0xF] = 1;
     }
@@ -491,6 +491,24 @@ void ld_F_Vx(Chip8 *chip8) {
     uint8_t target_v_reg = (chip8->current_op & 0x0F00) >> 8;
 
     chip8->I_reg = (chip8->V[target_v_reg] * 0x5);
+    chip8->pc_reg += 2;
+}
+
+
+/*
+* Opcode FX33: LD B, VX
+* Store the Binary Coded Decimal representation of V[X]
+* at memory location I (hundreds place) I+1 (tens place) and I+2 (ones place)
+* 
+* Used this for page for a hint on this op implementation:
+* http://www.multigesture.net/articles/how-to-write-an-emulator-chip-8-interpreter/
+*/
+void st_bcd_Vx(Chip8 *chip8) {
+    uint8_t target_v_reg = (chip8->current_op & 0x0F00) >> 8;
+
+    chip8->ram[chip8->I_reg] = chip8->V[target_v_reg] / 100;                 // MSb
+    chip8->ram[chip8->I_reg + 1] = (chip8->V[target_v_reg] / 10) % 10;
+    chip8->ram[chip8->I_reg + 2] = (chip8->V[target_v_reg] % 100) % 10;      // LSb
     chip8->pc_reg += 2;
 }
 
