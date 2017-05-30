@@ -204,6 +204,46 @@ void add_Vx_Vy(Chip8 *chip8) {
 
 
 /*
+* Opcode 8XY5: SUB Vx, Vy
+* V[X] - V[Y] stored in V[X]
+* If V[X] > V[Y], V[F] register (borrow) is set to 1, else 0 (NOT borrow essentially)
+*/
+void sub_Vx_Vy(Chip8 *chip8) {
+    uint8_t target_v_reg_x = (chip8->current_op & 0x0F00) >> 8;
+    uint8_t target_v_reg_y = (chip8->current_op & 0x00F0) >> 4;
+
+    if (chip8->V[target_v_reg_x] > chip8->V[target_v_reg_y]) {
+        chip8->V[0xF] = 1;
+    }
+    else {
+        chip8->V[0xF] = 0;
+    }
+
+    chip8->V[target_v_reg_x] -= chip8->V[target_v_reg_y];
+}
+
+
+/*
+* Opcode 8XY7: SUBN Vx, Vy
+* V[Y] - V[X] stored in V[X]
+* If V[Y] > V[X], V[F] register (borrow) is set to 1, else 0 (NOT borrow essentially)
+*/
+void subn_Vx_Vy(Chip8 *chip8) {
+    uint8_t target_v_reg_x = (chip8->current_op & 0x0F00) >> 8;
+    uint8_t target_v_reg_y = (chip8->current_op & 0x00F0) >> 4;
+
+    if (chip8->V[target_v_reg_y] > chip8->V[target_v_reg_x]) {
+        chip8->V[0xF] = 1;
+    }
+    else {
+        chip8->V[0xF] = 0;
+    }
+
+    chip8->V[target_v_reg_x] = chip8->V[target_v_reg_y] - chip8->V[target_v_reg_x];
+}
+
+
+/*
 * Opcode 9XY0: Skip next instruction
 * Increments the pc_reg by 4 (2 instructions) if  V[X] != V[Y]
 */

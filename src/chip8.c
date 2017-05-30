@@ -201,6 +201,16 @@ void execute_instruction(Chip8 *chip8, int logging) {
                     add_Vx_Vy(chip8);
                     break;
 
+                case 0x0005:
+                    if (logging) {printf("Instruction SUB VX VY (8XY5)\n");}
+                    sub_Vx_Vy(chip8);
+                    break;
+
+                case 0x0007:
+                    if (logging) {printf("Instruction SUBN VX VY (8XY7)\n");}
+                    subn_Vx_Vy(chip8);
+                    break;
+
                 default:
                     printf("ERROR: Unrecognized opcode 0x%X\n", opcode);
                     exit(EXIT_FAILURE);

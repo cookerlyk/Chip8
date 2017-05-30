@@ -1,7 +1,7 @@
 # Chip8
 Chip 8 Interpreter written in C:
 
-24/34 instructions are implimented<br>
+30/34 instructions are implimented<br>
 
 
 ## Building and Running:

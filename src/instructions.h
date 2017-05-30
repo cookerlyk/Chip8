@@ -24,9 +24,9 @@ void or_Vx_Vy(Chip8 *chip8);                    // 8XY1
 void and_Vx_Vy(Chip8 *chip8);                   // 8XY2
 void xor_Vx_Vy(Chip8 *chip8);                   // 8XY3
 void add_Vx_Vy(Chip8 *chip8);                   // 8XY4
-                                                // 8XY5
+void sub_Vx_Vy(Chip8 *chip8);                   // 8XY5
                                                 // 8XY6
-                                                // 8XY7
+void subn_Vx_Vy(Chip8 *chip8);                  // 8XY7
                                                 // 8XYE
 void sne_Vx_Vy(Chip8 *chip8);                   // 9XY0
 void ldi(Chip8 *chip8);                         // ANNN
