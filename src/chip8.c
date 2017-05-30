@@ -3,7 +3,7 @@
 
 // Load the rom into memory starting at location 0x200
 int load_rom(Chip8 *chip8, const char *rom_filename) {
-    int rom_length;
+    long rom_length;
     uint8_t *rom_buffer;
 
     FILE *rom = fopen(rom_filename, "rb");
@@ -91,7 +91,6 @@ void init_system(Chip8 *chip8) {
         chip8->keyboard[i] = FALSE;
     }
     chip8->was_key_pressed = FALSE;
-    chip8->waiting_for_key = FALSE;
 }
 
 
@@ -206,9 +205,19 @@ void execute_instruction(Chip8 *chip8, int logging) {
                     sub_Vx_Vy(chip8);
                     break;
 
+                case 0x0006:
+                    if (logging) {printf("Instruction SHR VX (8XY6)\n");}
+                    shr(chip8);
+                    break;
+
                 case 0x0007:
                     if (logging) {printf("Instruction SUBN VX VY (8XY7)\n");}
                     subn_Vx_Vy(chip8);
+                    break;
+
+                case 0x000E:
+                    if (logging) {printf("Instruction SHL VX (8XYE)\n");}
+                    shl(chip8);
                     break;
 
                 default:
@@ -265,6 +274,11 @@ void execute_instruction(Chip8 *chip8, int logging) {
                 case 0x0007:
                     if (logging) {printf("Instruction Load VX with Delay Timer (0007)\n");}
                     ld_Vx_dt(chip8);
+                    break;
+
+                case 0x000A:
+                    if (logging) {printf("Instruction Wait for key press (000A)\n");}
+                    ld_Vx_k(chip8);
                     break;
 
                 case 0x0015:

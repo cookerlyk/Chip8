@@ -25,9 +25,9 @@ void and_Vx_Vy(Chip8 *chip8);                   // 8XY2
 void xor_Vx_Vy(Chip8 *chip8);                   // 8XY3
 void add_Vx_Vy(Chip8 *chip8);                   // 8XY4
 void sub_Vx_Vy(Chip8 *chip8);                   // 8XY5
-                                                // 8XY6
+void shr(Chip8 *chip8);                         // 8XY6
 void subn_Vx_Vy(Chip8 *chip8);                  // 8XY7
-                                                // 8XYE
+void shl(Chip8 *chip8);                         // 8XYE
 void sne_Vx_Vy(Chip8 *chip8);                   // 9XY0
 void ldi(Chip8 *chip8);                         // ANNN
 void jump_V0(Chip8 *chip8);                     // BNNN
@@ -36,7 +36,7 @@ void drw(Chip8 *chip8);                         // DXYN
 void skp(Chip8 *chip8);                         // EX9E
 void sknp(Chip8 *chip8);                        // EXA1
 void ld_Vx_dt(Chip8 *chip8);                    // FX07
-                                                // FX0A
+void ld_Vx_k(Chip8 *chip8);                     // FX0A
 void ld_dt_Vx(Chip8 *chip8);                    // FX15
 void ld_st_Vx(Chip8 *chip8);                    // FX18
 void add_i_Vx(Chip8 *chip8);                    // FX1E

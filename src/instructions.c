@@ -225,6 +225,27 @@ void sub_Vx_Vy(Chip8 *chip8) {
 
 
 /*
+* Opcode 8XY6: SHR Vx
+* V[X] = V[X] >> 1
+* If LSB of V[X] == 1, V[F] register is set to 1, else 0
+*/
+void shr(Chip8 *chip8) {
+    uint8_t target_v_reg_x = (chip8->current_op & 0x0F00) >> 8;
+
+    // check if the LSB is 1 (odd num in V[X] will have a LSB of 1) 
+    if (chip8->V[target_v_reg_x] % 2 == 1) {
+        chip8->V[0xF] = 1;
+    }
+    else {
+        chip8->V[0xF] = 0;
+    }
+
+    chip8->V[target_v_reg_x] = chip8->V[target_v_reg_x] >> 1;
+    chip8->pc_reg += 2;
+}
+
+
+/*
 * Opcode 8XY7: SUBN Vx, Vy
 * V[Y] - V[X] stored in V[X]
 * If V[Y] > V[X], V[F] register (borrow) is set to 1, else 0 (NOT borrow essentially)
@@ -241,6 +262,27 @@ void subn_Vx_Vy(Chip8 *chip8) {
     }
 
     chip8->V[target_v_reg_x] = chip8->V[target_v_reg_y] - chip8->V[target_v_reg_x];
+    chip8->pc_reg += 2;
+}
+
+
+/*
+* Opcode 8XY6: SHL Vx
+* V[X] = V[X] << 1
+* If MSB of V[X] == 1, V[F] register is set to 1, else 0
+*/
+void shl(Chip8 *chip8) {
+    uint8_t target_v_reg_x = (chip8->current_op & 0x0F00) >> 8;
+
+    // check if the MSB is 1
+    if ((chip8->V[target_v_reg_x] & 10000000) == 1) {
+        chip8->V[0xF] = 1;
+    }
+    else {
+        chip8->V[0xF] = 0;
+    }
+
+    chip8->V[target_v_reg_x] = chip8->V[target_v_reg_x] << 1;
     chip8->pc_reg += 2;
 }
 
@@ -376,6 +418,31 @@ void ld_Vx_dt(Chip8 *chip8) {
     uint8_t target_v_reg = (chip8->current_op & 0x0F00) >> 8;
 
     chip8->V[target_v_reg] = chip8->delay_timer;
+    chip8->pc_reg += 2;
+}
+
+
+/*
+* Opcode FX0A: Load Vx, K
+* Waits for a key press
+* V[X] set to value of key (K) pressed
+*/
+void ld_Vx_k(Chip8 *chip8) {
+    uint8_t target_v_reg = (chip8->current_op & 0x0F00) >> 8;
+
+    chip8->was_key_pressed = FALSE;
+
+    for (int i = 0; i < NUM_KEYS; i++) {
+        if (chip8->keyboard[i] != FALSE) {
+            chip8->V[target_v_reg] = i;
+            chip8->was_key_pressed = TRUE;
+        }
+    }
+
+    if (!chip8->was_key_pressed) {
+        return;
+    }
+
     chip8->pc_reg += 2;
 }
 

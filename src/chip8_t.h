@@ -73,7 +73,6 @@ struct Chip8_t {
     // keys (16)
     uint8_t keyboard[NUM_KEYS];
     uint8_t was_key_pressed;
-    uint8_t waiting_for_key;
 
     // Status flags for the emulator
     uint8_t is_running_flag;
