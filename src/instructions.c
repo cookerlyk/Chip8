@@ -220,6 +220,7 @@ void sub_Vx_Vy(Chip8 *chip8) {
     }
 
     chip8->V[target_v_reg_x] -= chip8->V[target_v_reg_y];
+    chip8->pc_reg += 2;
 }
 
 
@@ -240,6 +241,7 @@ void subn_Vx_Vy(Chip8 *chip8) {
     }
 
     chip8->V[target_v_reg_x] = chip8->V[target_v_reg_y] - chip8->V[target_v_reg_x];
+    chip8->pc_reg += 2;
 }
 
 
