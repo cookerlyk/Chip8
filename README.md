@@ -1,5 +1,7 @@
 # Chip8
-Chip 8 Interpreter written in C:
+Chip 8 Interpreter written in C, using SDL2 for graphics.<br><br>
+
+Currently, the interpreter is in a playable state. The only missing core features are the system buzzer and more accurate timing for the execution of the system.
 
 ## Building and Running:
 
@@ -15,11 +17,14 @@ Running from the command line with logging enabled:<br>
 ```
 <unix> ./chip8 path/to/rom log
 ```
+### Compatibility:
+Verified compatible with Linux and Mac OS.
 
 ### Dependencies:
 GNU C compiler<br>
-SDL2 <br>
-A Chip-8 Rom<br>
+Command line tools if you are on Mac OS<br>
+[SDL2](https://www.libsdl.org/download-2.0.php) installed on your machine<br>
+A copy of a Chip-8 Rom<br>
 
 ## Keyboard Layout:
 
@@ -39,5 +44,4 @@ A Chip-8 Rom<br>
 | A | S | D | F |
 | Z | X | C | V |
 
-
-Press the 'ESC' key to close the emulator
+'esc' Key: Close the Emulator
