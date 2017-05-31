@@ -15,7 +15,7 @@ void load_rom(Chip8 *chip8, const char *rom_filename) {
 
         rom_buffer = (uint8_t*) malloc(sizeof(uint8_t) * rom_length);
         if (rom_buffer == NULL) {
-            printf("ERROR: Out of memory");
+            printf("ERROR: Out of memory\n");
             exit(EXIT_FAILURE);
         }
 
