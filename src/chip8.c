@@ -23,7 +23,7 @@ void load_rom(Chip8 *chip8, const char *rom_filename) {
         fread(rom_buffer, sizeof(uint8_t), rom_length, rom); 
 
         // Check that the rom is not too large for the region in memory it is placed in
-        if ((0xFFF - 0x200) >= rom_length) {
+        if ((PROGRAM_END_ADDR - PROGRAM_START_ADDR) >= rom_length) {
             for(int i = 0; i < rom_length; i++) {
                 chip8->ram[i + 0x200] = rom_buffer[i];
             }
