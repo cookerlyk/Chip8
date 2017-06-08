@@ -44,5 +44,5 @@ A copy of a Chip-8 Rom<br>
 | A | S | D | F |
 | Z | X | C | V |
 
-'esc' Key: Close the Emulator
+'esc' Key: Close the Emulator<br>
 'spacebar' : Pause / Resume the Emulator
