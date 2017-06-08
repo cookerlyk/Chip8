@@ -77,6 +77,7 @@ struct Chip8_t {
     // Status flags for the emulator
     uint8_t is_running_flag;
     uint8_t draw_screen_flag;
+    uint8_t is_paused_flag;
 };
 
 #endif // CHIP8_T_H

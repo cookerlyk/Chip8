@@ -54,6 +54,7 @@ void init_system(Chip8 *chip8) {
 
     chip8->is_running_flag = TRUE;
     chip8->draw_screen_flag = FALSE;
+    chip8->is_paused_flag = FALSE;
 
     chip8->pc_reg = PC_START;
     chip8->current_op = 0;
@@ -355,8 +356,12 @@ void process_user_input(Chip8 *chip8) {
                     break;
 
                 case SDLK_SPACE:
-                    // TODO: Add Pause Functionality
-                    printf("Pausing the emulator not yet implemented\n");
+                    if (chip8->is_paused_flag) {
+                        chip8->is_paused_flag = FALSE;
+                    }
+                    else {
+                        chip8->is_paused_flag = TRUE;
+                    }
                     break;
 
                 default:

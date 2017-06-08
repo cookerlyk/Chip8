@@ -79,8 +79,12 @@ int main (int argc, char *argv[]) {
             user_chip8.draw_screen_flag = FALSE;
         }
         
-        // Store key input states and check for user exit command
-        process_user_input(&user_chip8);
+        // Store key input states and check for user exit and pause commands.
+        // If the user presses the spacebar to pause the emulation, the program will stay
+        // in this loop until the user clears the is_paused_flag or presses the esc key
+        do {
+            process_user_input(&user_chip8);
+        } while (user_chip8.is_paused_flag && user_chip8.is_running_flag);
 
         // Update the timers at a rate different from the CPU clock
         // Orginal spec was ~60hz vs the ~540hz for the Chip8 machine
@@ -90,7 +94,7 @@ int main (int argc, char *argv[]) {
         }
 
         // slow down the emulation clock speed
-        // TODO: Better way needed
+        // TODO: Better way needed?
         usleep(CPU_CLOCK_DELAY);
     }
     
