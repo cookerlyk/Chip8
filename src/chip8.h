@@ -36,7 +36,8 @@ void update_timers(Chip8 *chip8);
 
 // Debugging functions
 void print_regs(Chip8 *chip8);
-void test_instruction(Chip8 *chip8);
+void print_stack(Chip8 *chip8);
+void print_keyboard(Chip8 *chip8);
 
 
 #endif // CHIP8_H

@@ -405,7 +405,7 @@ void update_timers(Chip8 *chip8) {
 
 
 /*****************************
-* Start of debugging functions
+* Debugging functions below
 ******************************/
 
 void print_regs(Chip8 *chip8) {
@@ -420,22 +420,20 @@ void print_regs(Chip8 *chip8) {
     printf("Delay Timer Reg: 0x%X\n", chip8->delay_timer);
     printf("Sound Timer Reg: 0x%X\n", chip8->sound_timer);
     printf("\n");
-
-    // print stack
-    // for (int i = 0; i < STACK_SIZE; i++) {
-    //     printf("Stack Element %i: 0x%X\n",i , chip8->stack[i]);
-    // }
-
-    // print keyboard
-    // for (int i = 0; i < NUM_KEYS; i++) {
-    //     printf("Keyboard Key %X: %i\n",i , chip8->keyboard[i]);
-    // }
 }
 
-void test_instruction(Chip8 *chip8) {
-    chip8->current_op = 0x76FF;
-    chip8->V[6] = 0x19;
-    print_regs(chip8);
-    add_Vx_imm(chip8);
-    print_regs(chip8);
+
+void print_stack(Chip8 *chip8) {
+    // print stack
+    for (int i = 0; i < STACK_SIZE; i++) {
+        printf("Stack Element %i: 0x%X\n",i , chip8->stack[i]);
+    }
+}
+
+
+void print_keyboard(Chip8 *chip8) {
+    // print keyboard
+    for (int i = 0; i < NUM_KEYS; i++) {
+        printf("Keyboard Key %X: %i\n",i , chip8->keyboard[i]);
+    }
 }
