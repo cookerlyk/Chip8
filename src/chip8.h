@@ -2,7 +2,7 @@
 #define CHIP8_H
 
 #include "instructions.h"
-#include <SDL2/SDL.h>
+#include <SDL.h>
 
 
 // Keymap for the emulator. Comments are the orignal
