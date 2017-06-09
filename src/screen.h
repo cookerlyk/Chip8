@@ -1,7 +1,7 @@
 #ifndef SCREEN_H
 #define SCREEN_H
 
-#include <SDL.h>
+#include <SDL2/SDL.h>
 #include "chip8_t.h"
 
 #define WINDOW_HEIGHT 640
