@@ -3,6 +3,11 @@ Chip 8 Interpreter written in C, using SDL2 for graphics.<br><br>
 
 Currently, the interpreter is in a playable state. The only missing core features are the system buzzer and more accurate timing for the execution of the system.
 
+### Screenshots:
+<img width="1278" alt="chip8_pong" src="https://user-images.githubusercontent.com/21052307/26961506-0c3be75c-4c94-11e7-87ab-ef0fe4d14325.png">
+
+<img width="1279" alt="chip8_space_invaders" src="https://user-images.githubusercontent.com/21052307/26961510-11cfe704-4c94-11e7-921d-19f8f409d16a.png">
+
 ## Building and Running:
 
 To build the project run: <br>
