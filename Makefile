@@ -2,7 +2,7 @@
 CC=gcc
 
 # CFLAGS specifies compiler options
-CFLAGS=-c -std=c99 -Wall -Wextra
+CFLAGS=-c -std=c99 -Wall -Wextra -O2
 
 # Compiler and linker options for SDL2
 SDL_CFLAGS= $(shell sdl2-config --cflags)

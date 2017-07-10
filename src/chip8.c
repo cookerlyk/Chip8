@@ -99,6 +99,41 @@ void init_system(Chip8 *chip8) {
     chip8->was_key_pressed = FALSE;
 }
 
+// Largely similar to the init function, however all of the ram is not cleared 
+// (so the rom does not have to be re-loaded into memory)
+void reset_system(Chip8 *chip8) {
+    chip8->is_running_flag = TRUE;
+    chip8->draw_screen_flag = FALSE;
+    chip8->is_paused_flag = FALSE;
+
+    chip8->pc_reg = PC_START;
+    chip8->current_op = 0;
+    chip8->sp_reg = 0;
+    chip8->I_reg = 0;
+
+    // Clear display (memory)
+    for (int i = 0; i < SCREEN_HEIGHT; i++) {
+        for (int j = 0; j < SCREEN_WIDTH; j++) {
+            chip8->screen[i][j] = 0;
+        }
+    }
+
+    // Clear ram
+    for (int i = 0; i < PROGRAM_START_ADDR; i++) {
+        chip8->ram[i] = 0;
+    }
+
+    // Clear registers, keyboard and stack (all 16 each)
+    for (int i = 0; i < 16; i++) {
+        chip8->V[i] = 0;
+        chip8->keyboard[i] = FALSE;
+        chip8->stack[i] = 0;
+    }
+    // Reset timers to 0
+    chip8->delay_timer = 0;
+    chip8->sound_timer = 0;
+}
+
 
 /* 
 * Fetches the next opcode to execute from memory which is
@@ -363,6 +398,8 @@ void process_user_input(Chip8 *chip8) {
                         chip8->is_paused_flag = TRUE;
                     }
                     break;
+                case SDLK_F5:
+                    reset_system(chip8);
 
                 default:
                     break;
