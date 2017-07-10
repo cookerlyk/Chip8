@@ -400,6 +400,7 @@ void process_user_input(Chip8 *chip8) {
                     break;
                 case SDLK_F5:
                     reset_system(chip8);
+                    break;
 
                 default:
                     break;
