@@ -118,8 +118,8 @@ void reset_system(Chip8 *chip8) {
         }
     }
 
-    // Clear ram
-    for (int i = 0; i < PROGRAM_START_ADDR; i++) {
+    // Clear ram from the fontset end (80) to the Program ram 
+    for (int i = 80; i < PROGRAM_START_ADDR; i++) {
         chip8->ram[i] = 0;
     }
 
@@ -398,6 +398,7 @@ void process_user_input(Chip8 *chip8) {
                         chip8->is_paused_flag = TRUE;
                     }
                     break;
+
                 case SDLK_F5:
                     reset_system(chip8);
                     break;
