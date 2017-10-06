@@ -376,7 +376,8 @@ void execute_instruction(Chip8 *chip8, int logging) {
 *
 * Also checks for key presses that have other functionality in the emulator
 *   ESC: Exit Emulator
-*   Spacebar: Pause Emulator (not yet implemented)
+*   Spacebar: Pause Emulator
+*   F5: Reset Emulator
 */
 void process_user_input(Chip8 *chip8) {
     SDL_Event e;
